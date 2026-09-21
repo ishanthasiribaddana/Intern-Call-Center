@@ -1,0 +1,34 @@
+{
+  "name": "intern-call-center",
+  "version": "0.0.1",
+  "description": "Intern Call Center - WhatsApp lead bridge and shared contact list",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "devDependencies": {
+    "electron": "^33.4.11",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.interncallcenter.app",
+    "productName": "Intern Call Center",
+    "files": [
+      "main.js",
+      "preload.js",
+      "renderer/**",
+      "config.default.json",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis",
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "shortcutName": "Intern Call Center"
+    }
+  }
+}

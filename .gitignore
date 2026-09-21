@@ -1,0 +1,8 @@
+node_modules/
+dist/
+pending.json
+*.log
+
+# contain the shared bearer token - never commit
+config.default.json
+server/env

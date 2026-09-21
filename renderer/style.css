@@ -1,0 +1,48 @@
+* { box-sizing: border-box; }
+body {
+  margin: 0; font-family: "Segoe UI", Arial, sans-serif;
+  background: #0f1419; color: #e6e6e6; font-size: 14px;
+}
+header {
+  display: flex; align-items: center; gap: 16px;
+  padding: 12px 16px; background: #171f27; border-bottom: 1px solid #26313b;
+}
+h1 { font-size: 17px; margin: 0; font-weight: 600; }
+.dots { margin-left: auto; display: flex; align-items: center; gap: 6px; color: #9aa7b2; }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.dot.green { background: #2ecc71; }
+.dot.grey { background: #5a6a76; }
+#who { color: #9aa7b2; }
+#name-box input { padding: 6px 8px; }
+.hidden { display: none; }
+
+.toolbar {
+  display: flex; gap: 8px; align-items: center;
+  padding: 10px 16px;
+}
+button {
+  background: #232f3a; color: #e6e6e6; border: 1px solid #33424f;
+  border-radius: 4px; padding: 6px 12px; cursor: pointer; font-size: 13px;
+}
+button:hover { background: #2c3b48; }
+button.filter.on { background: #1f6f4a; border-color: #1f6f4a; }
+input {
+  background: #171f27; color: #e6e6e6; border: 1px solid #33424f;
+  border-radius: 4px; padding: 6px 10px; font-size: 13px;
+}
+#search { margin-left: auto; width: 240px; }
+
+table { width: 100%; border-collapse: collapse; }
+th, td {
+  text-align: left; padding: 8px 16px;
+  border-bottom: 1px solid #202b34;
+}
+th { color: #9aa7b2; font-weight: 600; font-size: 12px; text-transform: uppercase; }
+tr:hover td { background: #161e26; }
+.badge-lead { color: #ffd166; }
+.badge-contact { color: #6cb2f5; }
+select {
+  background: #232f3a; color: #e6e6e6; border: 1px solid #33424f;
+  border-radius: 4px; padding: 4px 6px;
+}
+#empty { padding: 40px; text-align: center; color: #5a6a76; }

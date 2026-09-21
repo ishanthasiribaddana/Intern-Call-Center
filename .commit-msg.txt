@@ -1,0 +1,15 @@
+Add working app source and as-built details for v0.0.1
+
+The plan is implemented: Electron desktop app (localhost bridge on
+127.0.0.1:8787, leads table with live SSE updates, tray, auto-start),
+the Node collector service (deployed to 144.91.123.164:3700 with
+systemd), and the extension wiring that feeds it. The plan doc now
+records the as-built state, verified smoke tests, and the two build
+gotchas (winCodeSign symlink privilege, ELECTRON_RUN_AS_NODE).
+
+config.default.json and server/env are gitignored - they hold the
+shared bearer token.
+
+Generated with [Devin](https://devin.ai)
+
+Co-Authored-By: Devin <158243242+devin-ai-integration[bot]@users.noreply.github.com>

@@ -1,6 +1,6 @@
 # Intern Call Center — Desktop App Plan
 
-**Status:** Proposal — not yet approved
+**Status:** **Implemented — v0.0.1 deployed 2026-09-21.** See section 11 (As built).
 **Date:** 2026-09-21
 **App name:** Intern Call Center
 **Server:** 144.91.123.164 (Contabo VPS, Ubuntu, Nginx — access via `C:\Users\User\.ssh\id_ed25519_temco`)
@@ -200,3 +200,59 @@ Two additions:
    in the app, only status changes — safer.)
 3. **One WhatsApp or many?** The design works either way — each install just tags leads
    with the employee's name.
+
+---
+
+## 11. As built (2026-09-21) — what actually exists now
+
+### Server (144.91.123.164)
+
+| Item | Value |
+|---|---|
+| Path | `/opt/lead-collector/` |
+| Files | `server.js`, `env` (token), `events.json`, `public/` (installer) |
+| Service | `lead-collector.service` (systemd, auto-restart, enabled at boot) |
+| Port | `3700`, listening on `0.0.0.0` — `ufw` is inactive, so the token is the only auth |
+| Token | in `/opt/lead-collector/env` (chmod 600) and in the app's `config.default.json` — **not committed to git** |
+| Node | v20.20.0 (already on the box) |
+| Installer URL | `http://144.91.123.164:3700/download/Intern-Call-Center-Setup-0.0.1.exe` |
+| Backup cron | **not yet added** — `events.json` has no backup yet |
+
+Verified end-to-end: POST lead/contact, dedupe by phone, PATCH status, SSE live push,
+401 without token.
+
+### Desktop app
+
+| Item | Value |
+|---|---|
+| Source | this repo (`main.js`, `preload.js`, `renderer/`) — working copy at `Browser-Extension\Intern Call Center\` |
+| Installed at | `%LOCALAPPDATA%\Programs\intern-call-center\` |
+| Auto-start | registered (`electron.app.Electron` Run key → installed exe) |
+| Bridge | `127.0.0.1:8787` — `POST /event` (Origin must be `chrome-extension://…`), `GET /status` |
+| Offline | failed forwards queue in `userData\pending.json`, flushed every 30s |
+| Config | `userData\config.json` (name), defaults from bundled `config.default.json` |
+| Close button | hides to tray; Quit from tray menu exits |
+
+Build gotcha: `signAndEditExecutable: false` in `package.json` — electron-builder's
+winCodeSign download fails without admin (macOS symlink privilege). Exe keeps the
+default Electron icon. Dev-run gotcha: `ELECTRON_RUN_AS_NODE=1` in a shell makes
+`npx electron .` run as plain Node — clear it before `npm start`.
+
+### Extension wiring (in `Browser-Extension/extension/`)
+
+| Piece | What it does |
+|---|---|
+| `injected.js` | `reportContactCandidate()` posts `WA_CONTACT_SEEN` per inbound 1:1 number (deduped per load). `syncContactsToPanel()` bulk-posts every existing `@c.us` chat once per load — the panel starts full. Both gated on `isAutoPilotWatching()`. |
+| `leads.js` | Relays `WA_CONTACT_SEEN` → `ICC_EVENT` to background; after `upsertLead` saves, sends a `lead` event with all 5 fields. |
+| `background.js` | `ICC_EVENT` → POST `127.0.0.1:8787/event`. Failures queue in `chrome.storage.local['icc_pending']`, flushed on each event + worker start. |
+| `manifest.json` | added host permission `http://127.0.0.1:8787/*` |
+
+The app stamps `source` = employee name at forward time — the extension never knows it.
+
+**Reload required:** extension reload + F5 on the WhatsApp tab, and watching must be on
+(Auto-Forward alerts or Auto-Pilot).
+
+### Test results
+
+150 regression + 63 leads tests pass. Server smoke tests all green (health, POST, dedupe,
+PATCH, SSE, 401). Bridge accepts `chrome-extension://` origins, rejects others (403).

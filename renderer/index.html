@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Intern Call Center</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Intern Call Center</h1>
+    <div class="dots">
+      <span id="dot-server" class="dot grey" title="server"></span> server
+      <span id="dot-ext" class="dot grey" title="extension"></span> extension
+    </div>
+    <div id="name-box" class="hidden">
+      <input id="name-input" placeholder="Your name (e.g. nimal)">
+      <button id="name-save">Save</button>
+    </div>
+    <div id="who"></div>
+  </header>
+
+  <div class="toolbar">
+    <button class="filter on" data-f="All">All</button>
+    <button class="filter" data-f="New">New</button>
+    <button class="filter" data-f="Called">Called</button>
+    <button class="filter" data-f="Leads">Leads only</button>
+    <input id="search" placeholder="Search number or name">
+    <button id="export">Export CSV</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Phone</th><th>Name</th><th>Type</th><th>City</th><th>Email</th>
+        <th>Source</th><th>Received</th><th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <div id="empty">No contacts yet. They appear here the moment someone messages the WhatsApp line.</div>
+
+  <script src="app.js"></script>
+</body>
+</html>
